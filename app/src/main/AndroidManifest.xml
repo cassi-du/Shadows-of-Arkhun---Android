@@ -32,6 +32,8 @@
 
         <activity android:name=".MainActivity4"
             android:exported="true"/>
+        <activity android:name=".ListCharactersActivity"
+            android:exported="true"/>
         </application>
 
 </manifest>

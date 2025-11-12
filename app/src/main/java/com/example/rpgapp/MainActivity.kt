@@ -45,5 +45,12 @@ fun TelaInicial() {
         }) {
             Text("Criar Personagem")
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = {
+            val intent = Intent(context, ListCharactersActivity::class.java)
+            context.startActivity(intent)
+        }) {
+            Text("Listar Personagens")
+        }
     }
 }

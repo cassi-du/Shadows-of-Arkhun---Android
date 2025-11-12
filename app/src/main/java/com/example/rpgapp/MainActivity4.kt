@@ -8,9 +8,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import model.Personagem
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import com.example.rpgapp.DatabaseHelper
 
 class MainActivity4 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +51,7 @@ class MainActivity4 : ComponentActivity() {
 @Composable
 fun FichaPersonagem(p: Personagem) {
     val scroll = rememberScrollState()
+    val contexto = LocalContext.current
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -109,6 +114,31 @@ fun FichaPersonagem(p: Personagem) {
                     Text("Carisma:", style = MaterialTheme.typography.bodyMedium)
                     Text(p.atributos.carisma.toString(), style = MaterialTheme.typography.bodyMedium)
                 }
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Botões para salvar e ver personagens salvos
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = {
+                val db = DatabaseHelper(contexto)
+                if (db.characterExists(p.nome)) {
+                    Toast.makeText(contexto, "Personagem já existe no banco", Toast.LENGTH_SHORT).show()
+                } else {
+                    db.createPersonagem(p)
+                    Toast.makeText(contexto, "Personagem salvo", Toast.LENGTH_SHORT).show()
+                }
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text("Salvar Personagem")
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(onClick = {
+                val intent = android.content.Intent(contexto, ListCharactersActivity::class.java)
+                contexto.startActivity(intent)
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text("Ver Personagens Salvos")
             }
         }
     }
